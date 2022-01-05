@@ -1,0 +1,28 @@
+{
+  "name": "google-racapcha-node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo 'Error: no test specified' && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codeforgeek/google-racapcha-node.git"
+  },
+  "author": "Shahid shaikh",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/codeforgeek/google-racapcha-node/issues"
+  },
+  "homepage": "https://github.com/codeforgeek/google-racapcha-node#readme",
+  "dependencies": {
+    "body-parser": "^1.19.1",
+    "dotenv": "^10.0.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.2",
+    "nodemon": "^2.0.15",
+    "promise-mysql": "^5.0.4",
+    "request": "^2.88.2"
+  }
+}
