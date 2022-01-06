@@ -11,6 +11,14 @@ router.get('/recap',function(req,res) {
     res.render("recaptha");
 });
 
+router.get('/login',function(req,res){
+    res.render("login")
+});
+
+router.post('/login',function(req,res){
+  res.json({"responseCode" : 0,"responseDesc" : "Success"});
+});
+
 
 router.post('/submit',function(req,res){
   // g-recaptcha-response is the key that browser will generate upon form submit.
