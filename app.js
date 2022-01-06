@@ -6,7 +6,7 @@ var express = require('express'),
 //require routes
 var indexRoutes = require("./routers/index");
 
-app.use(express.static(__dirname + "\\public"));
+app.use(express.static(__dirname + "/public"));
 app.set("view engine", "ejs");
 app.set("views", __dirname + "\\views");
 
@@ -29,5 +29,5 @@ testconnectDB();
 
 // lifting the app on port 3000.
 app.listen(3000, function () {
-    console.log("Server listening at Port 3030");
+    console.log("Server starting at http://localhost:3000")
 });
