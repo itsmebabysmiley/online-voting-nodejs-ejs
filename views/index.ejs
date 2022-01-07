@@ -26,7 +26,7 @@
     }
   </style>
   <link href="/styles/index.css" rel="stylesheet" type="text/css">
-
+  <link href="/styles/main.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <%- include('./partials/header') %> 
@@ -41,7 +41,7 @@
           <div class="p-3 border shadow ">
             <h1 class="card-title">Login</h1>
             <img src="/images/log-in.png" class="rounded mx-auto d-block my-2" alt="..." width="170rem;">
-            <p class="text-muted">Please login before vote<br>Not on any account? <a href="?">register</a></p>
+            <p class="text-muted">Please login before vote<br>Not on any account? <a href="/register">register</a></p>
             <a class="btn btn-outline-primary" href="/login"> login </a>
           </div>
         </div>
@@ -50,7 +50,7 @@
             <h1 class="card-title">Voting<br>Results</h1>
             <img src="/images/voting-box.png" class="rounded mx-auto d-block my-2" alt="..." width="170rem;">
             <p class="text-muted">who will win the election?<br>I hope not Payut. I love lung tuu</p>
-            <a class="btn btn-outline-primary"> see the result</a>
+            <a class="btn btn-outline-primary" href="/vote-results"> see the result</a>
           </div>
         </div>
         <div class="col-4 zoom ">
