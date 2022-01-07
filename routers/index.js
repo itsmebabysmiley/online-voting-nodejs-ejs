@@ -7,16 +7,24 @@ router.get('/',function(req,res) {
     res.render("index");
 });
 
-router.get('/recap',function(req,res) {
-    res.render("recaptha");
-});
+// router.get('/recap',function(req,res) {
+//     res.render("recaptha");
+// });
 
 router.get('/login',function(req,res){
-    res.render("login")
+    res.render("login");
+});
+
+router.get('/register', function(req,res){
+    res.render("register");
+});
+
+router.get('/vote-results', function(req, res){
+    res.render("votepage");
 });
 
 router.post('/login',function(req,res){
-  res.json({"responseCode" : 0,"responseDesc" : "Success"});
+    res.json({"responseCode" : 0,"responseDesc" : "Success"});
 });
 
 
