@@ -43,6 +43,17 @@
     display: block;
     color: red;
     }
+
+    #g-recaptcha-response {
+      display: block !important;
+      position: absolute;
+      margin: -78px 0 0 0 !important;
+      width: 302px !important;
+      height: 76px !important;
+      z-index: -999999;
+      opacity: 0;
+    }
+
   </style>
   <link href="/styles/main.css" rel="stylesheet" type="text/css">
   <link href="/styles/signin.css" rel="stylesheet" type="text/css">
@@ -69,29 +80,46 @@
                       <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
                   
                       <div class="form-floating">
-                        <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                        <input type="email" class="form-control" id="floatingInput" name="email" placeholder="name@example.com" required>
                         <label for="floatingInput">Email address</label>
                       </div>
                       <div class="form-floating">
-                        <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                        <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password" required>
                         <label for="floatingPassword">Password</label>
                       </div>
-                  
+                      <% if (messages.error) { %>
+                        <div class="alert alert-danger" role="alert">
+                          <%= messages.error %>
+                        </div>
+                      <% } %>
                       <div class="checkbox mb-3">
                         <label>
                           <input type="checkbox" value="remember-me" class="rememberme"> Remember me
                           <div class="hide">Hi, You just found my secret. A woman just break my heart.</div>
                         </label>
                       </div>
-                      <div class="g-recaptcha" data-sitekey="6LeBF_EdAAAAACGZlCWf5CPdNdlpXMgqU3oxOuyE"></div><br>
-                      <a href="/register" class="d-flex justify-content-end mb-2">Register?</a>
+                      <div class="g-recaptcha" data-sitekey="6LeBF_EdAAAAACGZlCWf5CPdNdlpXMgqU3oxOuyE" required></div><br>
+                      <p class="mb-2"> Not a member? <a href="/register" style="color: #0d6efd;">Register</a> </p>
+                      
                       <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+                      
                       <p class="mt-5 mb-3 text-muted">&copy; 2022</p>
                     </form>
                 </main>
+                
             </div>
           </div>
     </main>
-    
 </body>
+<script>
+  //original: https://stackoverflow.com/questions/27706594/how-can-i-make-recaptcha-a-required-field
+  window.onload = function() {
+    var $recaptcha = document.querySelector('#g-recaptcha-response');
+
+    if($recaptcha) {
+        $recaptcha.setAttribute("required", "required");
+    }
+  };
+  
+</script>
 </html>

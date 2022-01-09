@@ -8,7 +8,21 @@
         <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
             <a class="me-3 py-2 text-dark text-decoration-none" href="#">Features</a>
             <a class="me-3 py-2 text-dark text-decoration-none" href="#">Support</a>
-            <a class="py-2 text-dark text-decoration-none" href="/login">Login</a>
+            
+            <% if(!currentUser) { %> 
+                <a class="py-2 text-dark text-decoration-none" href="/login">Login</a>
+            <% } else { %>
+        
+            <div class="dropdown">
+                <a href="#" class="btn dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"> <img src="/images/profile-icon.png" alt="" width="30" height="30" ></a>
+              
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                  <li><a class="dropdown-item disabled" href="#"> <%=currentUser%> </a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="/logout">Log Out</a></li>
+                </ul>
+              </div>
+            <% } %>
         </nav>
         </div>
     </header>
