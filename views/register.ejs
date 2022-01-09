@@ -66,23 +66,28 @@
                 <main class="form-signup justify-content-center text-center ">
                     <img class="mb-4" src="/images/raise-hand.png" alt="" width="72" height="57">
                     <h1 class="h3 mb-3 fw-normal">Please register</h1>
-                    <form action="/login" method="POST" >
+                    <form action="/register" method="POST" >
                         <div class="row form-signup" >
                             <div class="col form-floating" style="padding-left: 0px; margin-bottom: 0px;">
-                                <input type="text" class="form-control" id="floatingfname" placeholder="Firstname" required>
+                                <input type="text" class="form-control" id="floatingfname" name="fname" placeholder="Firstname" required>
                                 <label for="floatingfname">Firstname</label>
                             </div>
                             <div class="col form-floating" style="padding-right: 0px; margin-bottom: 0px;">
-                                <input type="text" class="form-control" id="floatinglname" placeholder="Lastname" required>
+                                <input type="text" class="form-control" id="floatinglname" name="lname" placeholder="Lastname" required>
                                 <label for="floatinglname" style="padding-left: 22px;">Lastname</label>
                             </div>
                         </div>
                         <div class="form-floating">
-                            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" required>
+                            <input type="email" class="form-control" id="floatingInput" name="email" placeholder="name@example.com" required>
                             <label for="floatingInput">Email address</label>
                         </div>
+                        <% if (errorCode == 1) { %>
+                          <div class="alert alert-warning" role="alert">
+                            <%= msg %>
+                          </div>
+                        <% } %>
                         <div class="form-floating">
-                            <input type="password" class="form-control" id="floatingPassword" placeholder="Password" aria-describedby="passwordHelpBlock" required>
+                            <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password" aria-describedby="passwordHelpBlock" required>
                             <label for="floatingPassword">Password</label>
                             <div id="passwordHelpBlock" class=" form-text text-start ps-2">
                                 Your password must be 8-20 characters long.
@@ -90,14 +95,19 @@
                         </div>
                         <div class="row form-signup" >
                             <div class="col form-floating" style="padding-left: 0px; margin-bottom: 0px; margin-top: 0px;">
-                                <input type="tel" class="form-control" id="phoneNumber" placeholder="phone number" maxlength="10"  pattern="[0-9]{10}" oninvalid="this.setCustomValidity('Please put only number 0-9')" required/>
+                                <input type="tel" class="form-control" id="phoneNumber" name="tel" placeholder="phone number" maxlength="10"  pattern="[0-9]{10}" oninvalid="this.setCustomValidity('Please put only number 0-9')" required/>
                                 <label for="phoneNumber">phone number</label>
                             </div>
                             <div class="col form-floating" style="padding-right: 0px; margin-bottom: 0px; margin-top: 0px;">
-                                <input type="date" class="form-control" id="birthday" placeholder="Birthday" required>
+                                <input type="date" class="form-control" id="birthday" name="DOB" placeholder="Birthday" required>
                                 <label style="padding-left: 22px;">Birthday</label>
                             </div>
                         </div>
+                        <% if(errorCode == 4) { %>
+                        <div class="alert alert-danger mt-3" role="alert">
+                          A simple danger alert—check it out!
+                        </div>
+                        <% } %>
                         </br>
                         <button class="w-100 btn btn-lg btn-primary btn-signup" type="submit">Sign in</button>
                       <p class="mt-5 mb-3 text-muted">&copy; 2022</p>
@@ -106,5 +116,6 @@
             </div>
           </div>
     </main>
+    <div class="container m-5"></div>
 </body>
 </html>
