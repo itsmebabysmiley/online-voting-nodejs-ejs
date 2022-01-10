@@ -44,19 +44,6 @@ app.use((req, res, next) => {
     next();
 });
 
-//test the database connection
-async function testconnectDB() {
-    let connection = await dbConnection();
-    connection.query("SELECT email, password FROM election_db.users WHERE email = ?", "snzzare@gmail.com", (err, result)=> {
-        if(err) throw err;
-        else
-        console.log("dB connected!");
-    });
-}
-testconnectDB();
-
-
-
 // This will handle all the routes.
 app.use("/",indexRoutes);
 

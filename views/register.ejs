@@ -69,11 +69,11 @@
                     <form action="/register" method="POST" >
                         <div class="row form-signup" >
                             <div class="col form-floating" style="padding-left: 0px; margin-bottom: 0px;">
-                                <input type="text" class="form-control" id="floatingfname" name="fname" placeholder="Firstname" required>
+                                <input type="text" class="form-control" id="floatingfname" name="fname" placeholder="Firstname" required value="<%= user.fname %>">
                                 <label for="floatingfname">Firstname</label>
                             </div>
                             <div class="col form-floating" style="padding-right: 0px; margin-bottom: 0px;">
-                                <input type="text" class="form-control" id="floatinglname" name="lname" placeholder="Lastname" required>
+                                <input type="text" class="form-control" id="floatinglname" name="lname" placeholder="Lastname" value="<%= user.lname %>"required>
                                 <label for="floatinglname" style="padding-left: 22px;">Lastname</label>
                             </div>
                         </div>
@@ -95,11 +95,11 @@
                         </div>
                         <div class="row form-signup" >
                             <div class="col form-floating" style="padding-left: 0px; margin-bottom: 0px; margin-top: 0px;">
-                                <input type="tel" class="form-control" id="phoneNumber" name="tel" placeholder="phone number" maxlength="10"  pattern="[0-9]{10}" oninvalid="this.setCustomValidity('Please put only number 0-9')" required/>
+                                <input type="tel" class="form-control" id="phoneNumber" name="tel" placeholder="phone number" maxlength="10"  pattern="[0-9]{10}" value="<%= user.tel %>"oninvalid="this.setCustomValidity('Please put only number 0-9')" required/>
                                 <label for="phoneNumber">phone number</label>
                             </div>
                             <div class="col form-floating" style="padding-right: 0px; margin-bottom: 0px; margin-top: 0px;">
-                                <input type="date" class="form-control" id="birthday" name="DOB" placeholder="Birthday" required>
+                                <input type="date" class="form-control" id="birthday" name="DOB" placeholder="Birthday" value="<%= user.DOB %>"required>
                                 <label style="padding-left: 22px;">Birthday</label>
                             </div>
                         </div>

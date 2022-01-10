@@ -1,12 +1,16 @@
 const express = require('express'),
       request = require('request'),
       router = express(),
-      bcrypt = require('bcrypt')
+      bcrypt = require('bcrypt'),
+      jwt = require('jsonwebtoken');
+
 
 const passport = require('passport');
+const nodemailer = require("nodemailer");
 
 const dbConnection = require("../config/dbConnect");
-const {checkAuthenticated, checkNotAuthenticated, checkAuthenticatedForVotePage} = require("../middleware/index.js");
+const transporter  = require("../config/nodemailer-config");
+const {checkAuthenticated, checkNotAuthenticated, checkAuthenticatedForVotePage, checkAuthenticatedForActivateAccount} = require("../middleware/index.js");
 
 router.get('/', (req,res) => {
     res.render("index");
@@ -20,20 +24,19 @@ router.get('/logout', (req, res)=>{
     req.logout();
     res.redirect("/");
 })
+
 router.get('/register',checkNotAuthenticated, (req,res) => {
-    res.render("register", {errorCode : 0});
+    res.render("register", {errorCode : 0, user: {}});
 });
 
 router.get('/vote-page',checkAuthenticated, (req, res)=>{
     res.render('vote-page.ejs',);
 })
+
 router.get('/vote-results',checkAuthenticatedForVotePage, (req, res) => {
     res.render("vote-result.ejs");
 });
 
-router.get('/it-failed', (req, res)=>{
-  res.send('try again');
-})
 router.post('/login',checkCaptcha,checkNotAuthenticated, passport.authenticate('local',
                                             { failureRedirect: '/login', 
                                               successRedirect: '/vote-page',
@@ -50,19 +53,38 @@ router.post('/register',checkNotAuthenticated, async (req, res) => {
     'DOB' : req.body.DOB
   }
   let connection = await dbConnection();
-  connection.query("insert into election_db.users set ?", user, (err, result)=>{
+  connection.query("insert into election_db.users set ?", user, async (err, result)=>{
     if(err){
       if(err.errno == 1062){
-        return res.render("register.ejs", {error: true, errorCode: 1, msg: "This email is already used. Please use another email"});
+        return res.render("register.ejs", {errorCode: 1, msg: "This email is already used. Please use another email", user});
       }
-      return res.render("register.ejs", {error: true, errorCode: 4, msg: "Someting went wrong. Please try again"});
+      return res.render("register.ejs", {errorCode: 4, msg: "Someting went wrong. Please try again"});
     }
     else{
-      return res.json({"responseCode" : 1,"responseDesc" : "Insert successfully"});
+        let info;
+        var token = jwt.sign({ email: req.body.email, password: req.body.password }, process.env.JWT_SECRET, { expiresIn: '10h' });
+        try {
+          info = await transporter.sendMail({
+            from: '"Voteme" <noreply@voteme.com>', // sender address
+            to: req.body.email, // list of receivers
+            subject: "Please confrim the email", // Subject line
+            text: `Please confrim this email to vote Payut.`, // plain text body
+            html: `<h2>Please click on given link to activate your account</h2><p>Dear ${req.body.fname} ${req.body.lname}, </p> Please click on given link to activate your account <a href="http://127.0.0.1:3000/autertication/activate/${token}">confirm</a> in 1 hour before your computer brow up.` // html body
+          });
+        }catch(error){
+          throw error;
+        }
+
+      return res.redirect('/login');
     }
   });
 })
 
+//check valid link for new user to activate the account.
+router.get('/autertication/activate/:token', checkAuthenticatedForActivateAccount, passport.authenticate('local',
+                                                                                            { failureRedirect: '/Not-found', 
+                                                                                            successRedirect: '/',
+                                                                                            failureFlash: true }));
 
 function checkCaptcha(req,res, next) {
   // g-recaptcha-response is the key that browser will generate upon form submit.
@@ -84,5 +106,7 @@ function checkCaptcha(req,res, next) {
     return next();
   });
 };
+
+
 
 module.exports = router;
