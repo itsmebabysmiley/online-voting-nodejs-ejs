@@ -1,6 +1,5 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy
-const session = require('express-session')
 const bcrypt = require('bcrypt')
 
 const dbConnection = require("../config/dbConnect");
@@ -11,11 +10,8 @@ const customFields = {
 };
 
 const verifyCallback = async (username, password, done) => {
-  console.log("username, password");
-  console.log(username);
-  console.log(password);
   let connection = await dbConnection();
-  connection.query("SELECT email,password FROM election_db.users WHERE email = ?", username, async (err, result)=> {
+  connection.query("SELECT email,password,emailVerified FROM election_db.users WHERE email = ?", username, async (err, result)=> {
     if(err){
       done(err);
     }else{
