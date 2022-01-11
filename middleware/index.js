@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const updateEmail = require('../models/update-emailVerification');
 var middlewareObj = {};
 
 middlewareObj.checkAuthenticated = function(req, res, next){
@@ -31,12 +32,21 @@ middlewareObj.checkAuthenticatedForVotePage = function(req, res, next){
 middlewareObj.checkAuthenticatedForActivateAccount = (req, res, next) =>{
     var  token = req.params.token;
     if(token){
-      jwt.verify(token, process.env.JWT_SECRET, (err, decoded)=>{
+      jwt.verify(token, process.env.JWT_SECRET, async (err, decoded)=>{
         if(err){
             return res.status(400).json({"responseCode" : 1,"responseDesc" : "Failed captcha activate your account! Maybe link is out of date or you're an idoit."})
         }else{
             const {email, password} = decoded;
-            req.body = {email: email, password: password};
+            // TODO: fix the emailverified to be real value.
+            var status = await updateEmail(email);
+            var emailVerified = 'false'
+            if(status === 1){
+                emailVerified = 'true';
+            }else{
+                emailVerified = 'false';
+            }
+            req.body = {email: email, password: password, emailVerified: emailVerified};
+            req.user[0].emailVerified = emailVerified;
             return next();
         }
       });

@@ -11,6 +11,7 @@ const session = require('express-session')
 var indexRoutes = require("./routers/index");
 
 const dbConnection = require("./config/dbConnect");
+const getEmailStatus = require("./models/get-emailStatus");
 
 app.use(express.static(__dirname + "/public"));
 app.set("view engine", "ejs");
@@ -34,13 +35,21 @@ app.use(session({
 require("./config/passport-config.js");
 app.use(passport.initialize())
 app.use(passport.session())
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
     res.locals.currentUser = null;
+    res.locals.emailVerified = null;
     if(req.user){
-        res.locals.currentUser = req.user[0].email;
+        res.locals.currentUser = req.user[0].email; 
+        var status = await getEmailStatus(req.user[0].email);
+        if(status){
+            res.locals.emailVerified = status[0].emailVerified; 
+            req.user[0].emailVerified = status[0].emailVerified;
+        }
     } 
     // console.log(req.session);
+    // console.log('###################');
     // console.log(req.user);
+    // console.log('###################');
     next();
 });
 

@@ -2,15 +2,12 @@ const express = require('express'),
       request = require('request'),
       router = express(),
       bcrypt = require('bcrypt'),
-      jwt = require('jsonwebtoken');
-
-
-const passport = require('passport');
-const nodemailer = require("nodemailer");
+      jwt = require('jsonwebtoken'),
+      passport = require('passport');
 
 const dbConnection = require("../config/dbConnect");
 const transporter  = require("../config/nodemailer-config");
-const {checkAuthenticated, checkNotAuthenticated, checkAuthenticatedForVotePage, checkAuthenticatedForActivateAccount} = require("../middleware/index.js");
+const {checkAuthenticated, checkNotAuthenticated,                                                              checkAuthenticatedForVotePage, checkAuthenticatedForActivateAccount} = require("../middleware/index.js");
 
 router.get('/', (req,res) => {
     res.render("index");
@@ -61,7 +58,7 @@ router.post('/register',checkNotAuthenticated, async (req, res) => {
       return res.render("register.ejs", {errorCode: 4, msg: "Someting went wrong. Please try again"});
     }
     else{
-        let info;
+        // Generate token for verify an email.
         var token = jwt.sign({ email: req.body.email, password: req.body.password }, process.env.JWT_SECRET, { expiresIn: '10h' });
         try {
           info = await transporter.sendMail({
@@ -85,6 +82,10 @@ router.get('/autertication/activate/:token', checkAuthenticatedForActivateAccoun
                                                                                             { failureRedirect: '/Not-found', 
                                                                                             successRedirect: '/',
                                                                                             failureFlash: true }));
+
+router.get('/voteme', checkAuthenticated, (req, res)=>{
+  
+});
 
 function checkCaptcha(req,res, next) {
   // g-recaptcha-response is the key that browser will generate upon form submit.
