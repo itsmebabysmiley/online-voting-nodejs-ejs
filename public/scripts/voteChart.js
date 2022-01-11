@@ -1,26 +1,14 @@
 const labels = ['Baby','Bob'];
 const data = {
-    labels: labels,
+    labels: ['Baby1','Baby2'],
     datasets: [
-        // {
-        //     label: 'Baby',
-        //     backgroundColor: 'rgb(213, 126, 126)',
-        //     borderColor: 'rgb(213, 126, 126)',
-        //     data: [100],
-        // },
-        // {
-        //     label: 'Bob',
-        //     backgroundColor: 'rgb(198, 213, 126)',
-        //     borderColor: 'rgb(198, 213, 126)',
-        //     data: [150],
-        // },
         {
-        barThickness: 100,
-        maxBarThickness: 200,
-        minBarLength: 20,
-        data: [100,150],
-        backgroundColor: [ 'rgb(213, 126, 126)', 'rgb(198, 213, 126)'],
-        borderColor: ['rgb(213, 126, 126)', 'rgb(198, 213, 126)']
+            barThickness: 100,
+            maxBarThickness: 400,
+            minBarLength: 0,
+            data: [100,300],
+            backgroundColor: [ 'rgb(213, 126, 126)', 'rgb(198, 213, 126)'],
+            borderColor: ['rgb(213, 126, 126)', 'rgb(198, 213, 126)'],
         }
 
     ]
@@ -36,58 +24,51 @@ const barAvatar = {
         scales: {x,y}} = chart;
         ctx.save();
         // console.log('hi');
-        console.log(y.getPixelForValue(100));
-        ctx.drawImage(img1, x.getPixelForValue(0) - (100/2), y.getPixelForValue(100) - 100, 100, 100);
-        ctx.drawImage(img1, x.getPixelForValue(1) - (100/2), y.getPixelForValue(150) - 100, 100, 100);
+        // console.log(y.getPixelForValue(100));
+        ctx.drawImage(img1, x.getPixelForValue(0) - (100/2), y.getPixelForValue(100) - 110, 100, 100);
+        ctx.drawImage(img1, x.getPixelForValue(1) - (100/2), y.getPixelForValue(300) - 110, 100, 100);
     }
 }
 
 const config = {
     type: 'bar',
     data,
-    options: {
-        //indexAxis: 'y',
-        responsive: true,
-        scales: {
-            y: {
-                beginAtZero: true,
-                // grid: {
-                //     display: false
-                // },
-                display: false,
-                suggestedMin: 0,
-                suggestedMax: 200
-            },
-            x: {
-                beginAtZero: true,
-                grid: {
+    plugins: [ChartDataLabels,barAvatar],
+        options: {
+            plugins: {
+                legend: {
                     display: false
                 },
-                // display: false
-            }
-        },
-        plugins: { 
-            legend: { 
-                display: false ,
+                datalabels: {
+                    color: 'black',
+                    anchor: 'end',
+                    align: 'top',
+                    font: {
+                        weight: 'bold',
+                        size: 20
+                    },
+                },
+
             },
-            title: {
-                display: true,
-                text: 'Baby vs Baby',
-                font: {
-                    size: 20
+            reponsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    display: false,
+                    suggestedMin: 0,
+                    suggestedMax: 500
+                },
+                x: {
+                    beginAtZero: true,
+                    grid: {
+                        display: false
+                    },
                 }
             },
-            
         },
-        
-    },
-    plugins: [barAvatar]
 };
 
 var myChart = new Chart(
     document.getElementById('myChart'),
     config
 );
-// var myImage = new Image(100, 200);
-// myImage.src = '/images/book.png';
-// document.getElementById("testpic").appendChild(myImage); 
