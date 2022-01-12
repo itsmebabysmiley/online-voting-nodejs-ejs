@@ -1,12 +1,12 @@
 require('dotenv').config();
 var express = require('express'),
     bodyParser = require('body-parser'),
-    app = express();
+    app = express(),
+    cookieParser = require('cookie-parser');
 
-var passport = require('passport')
-const flash = require('express-flash')
-const session = require('express-session')
-
+var passport = require('passport');
+const flash = require('express-flash');
+const session = require('express-session');
 //require routes
 var indexRoutes = require("./routers/index");
 
@@ -19,6 +19,7 @@ app.set("views", __dirname + "\\views");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended : false}));
 app.use(flash());
+app.use(cookieParser());
 
 // session set up
 const sessionStore = require("./models/session.js");
@@ -39,17 +40,18 @@ app.use(async (req, res, next) => {
     res.locals.currentUser = null;
     res.locals.emailVerified = null;
     if(req.user){
+        let users = { email: req.user[0].email };
         res.locals.currentUser = req.user[0].email; 
         var status = await getEmailStatus(req.user[0].email);
         if(status){
             res.locals.emailVerified = status[0].emailVerified; 
             req.user[0].emailVerified = status[0].emailVerified;
+            users.emailVerified = status[0].emailVerified;
         }
+        res.cookie("userData", users,);
     } 
     // console.log(req.session);
-    // console.log('###################');
     // console.log(req.user);
-    // console.log('###################');
     next();
 });
 

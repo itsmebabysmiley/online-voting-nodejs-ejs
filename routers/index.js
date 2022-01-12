@@ -1,5 +1,5 @@
 const express = require('express'),
-      request = require('request'),
+
       router = express(),
       bcrypt = require('bcrypt'),
       jwt = require('jsonwebtoken'),
@@ -8,6 +8,7 @@ const express = require('express'),
 const dbConnection = require("../config/dbConnect");
 const transporter  = require("../config/nodemailer-config");
 const {checkAuthenticated, checkNotAuthenticated,                                                              checkAuthenticatedForVotePage, checkAuthenticatedForActivateAccount} = require("../middleware/index.js");
+const checkCaptcha = require("../middleware/checkCaptcha");
 
 router.get('/', (req,res) => {
     res.render("index");
@@ -83,30 +84,14 @@ router.get('/autertication/activate/:token', checkAuthenticatedForActivateAccoun
                                                                                             successRedirect: '/',
                                                                                             failureFlash: true }));
 
-router.get('/voteme', checkAuthenticated, (req, res)=>{
-  
+router.post('/voteme', checkAuthenticated, (req, res)=>{
+  //TODO : user has already voted that can't vote anymore. If user just voted, return the new vote count.
+
+  console.log(req.body);
+  res.status(200).json({data: 'ok'});
 });
 
-function checkCaptcha(req,res, next) {
-  // g-recaptcha-response is the key that browser will generate upon form submit.
-  // if its blank or null means user has not selected the captcha, so return the error.
-  if(req.body['g-recaptcha-response'] === undefined || req.body['g-recaptcha-response'] === '' || req.body['g-recaptcha-response'] === null) {
-    return res.json({"responseCode" : 1,"responseDesc" : "Please select captcha"});
-  }
-  // Put your secret key here.
-  var secretKey = process.env.RECAPTHA_SECRETKEY;
-  // req.connection.remoteAddress will provide IP address of connected user.
-  var verificationUrl = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + req.body['g-recaptcha-response'] + "&remoteip=" + req.connection.remoteAddress;
-  // Hitting GET request to the URL, Google will respond with success or error scenario.
-  request(verificationUrl, (error, response, body) => {
-    body = JSON.parse(body);
-    // Success will be true or false depending upon captcha validation.
-    if(body.success !== undefined && !body.success) {
-      return res.json({"responseCode" : 1,"responseDesc" : "Failed captcha verification"});
-    }
-    return next();
-  });
-};
+
 
 
 

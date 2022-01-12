@@ -13,11 +13,10 @@
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.0.0/chartjs-plugin-datalabels.min.js" integrity="sha512-R/QOHLpV1Ggq22vfDAWYOaMd5RopHrJNMxi8/lJu8Oihwi4Ho4BRFeiMiCefn9rasajKjnx9/fTQ/xkWnkDACg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
+    <!-- axios CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    
     <style>
-        .chart{
-            
-        }
         .zoom {
             transition: transform .2s; 
           }
@@ -45,11 +44,11 @@
             <div class="row justify-content-start">
                 <div class="col">
                     <h2><b>Candidate 1</b></h2>
-                    <a class="btn btn-primary btn-lg zoom shadow m-3" onclick="vote(1, <%= emailVerified %>)"> VOTE NOW </a>
+                    <a class="btn btn-primary btn-lg zoom shadow m-3" onclick="vote(1)"> VOTE NOW </a>
                 </div>
                 <div class="col">
                     <h2><b>Candidate 2</b></h2>
-                    <a class="btn btn-primary btn-lg zoom shadow m-3" onclick="vote(2,<%= emailVerified %>)"> VOTE NOW </a>
+                    <a class="btn btn-primary btn-lg zoom shadow m-3" onclick="vote(2)"> VOTE NOW </a>
                 </div>
               </div>
         </div>
