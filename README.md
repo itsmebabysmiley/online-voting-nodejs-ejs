@@ -1,6 +1,6 @@
 # Online website for online voting
 
-<img src="https://github.com/itsmebabysmiley/online-voting-nodejs-ejs/blob/developing/public/images/voteme-logo.png">
+<img src="https://github.com/itsmebabysmiley/online-voting-nodejs-ejs/blob/main/public/images/voteme-logo.png">
 
 ## Things you should know.
 1. This project is implementing on Express JS and EJS template.
