@@ -84,6 +84,14 @@ router.get('/autertication/activate/:token', checkAuthenticatedForActivateAccoun
                                                                                             successRedirect: '/',
                                                                                             failureFlash: true }));
 
+router.get('/vote-info', async (req, res)=>{
+  let connection = await dbConnection();
+  connection.query("select * from vote", async (err, result)=>{
+    if(err) return res.json({error: true, data: err});
+    return res.json( {error: false, data: result} );
+  });
+})
+
 router.post('/voteme', checkAuthenticated, (req, res)=>{
   //TODO : user has already voted that can't vote anymore. If user just voted, return the new vote count.
 
