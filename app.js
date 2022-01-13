@@ -10,8 +10,8 @@ const session = require('express-session');
 //require routes
 var indexRoutes = require("./routers/index");
 
-const dbConnection = require("./config/dbConnect");
 const getEmailStatus = require("./models/get-emailStatus");
+const getVoteStatus = require("./models/get-voteStatus");
 
 app.use(express.static(__dirname + "/public"));
 app.set("view engine", "ejs");
@@ -42,11 +42,13 @@ app.use(async (req, res, next) => {
     if(req.user){
         let users = { email: req.user[0].email };
         res.locals.currentUser = req.user[0].email; 
-        var status = await getEmailStatus(req.user[0].email);
-        if(status){
-            res.locals.emailVerified = status[0].emailVerified; 
-            req.user[0].emailVerified = status[0].emailVerified;
-            users.emailVerified = status[0].emailVerified;
+        var emailStatus = await getEmailStatus(req.user[0].email);
+        var voteStatus = await getVoteStatus(req.user[0].email);
+        if(emailStatus){
+            res.locals.emailVerified = emailStatus[0].emailVerified; 
+            req.user[0].emailVerified = emailStatus[0].emailVerified;
+            users.emailVerified = emailStatus[0].emailVerified;
+            users.voted = voteStatus[0].voted;
         }
         res.cookie("userData", users,);
     } 

@@ -15,7 +15,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.0.0/chartjs-plugin-datalabels.min.js" integrity="sha512-R/QOHLpV1Ggq22vfDAWYOaMd5RopHrJNMxi8/lJu8Oihwi4Ho4BRFeiMiCefn9rasajKjnx9/fTQ/xkWnkDACg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- axios CDN -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    
+    <!-- Animation -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <style>
         .zoom {
             transition: transform .2s; 
@@ -36,22 +37,9 @@
     </div>
     <br>
     <div class="container text-center w3-animate-zoom shadow p-3 mt-5">
-        <h1> <b>Your vote is important!</b></h1>
-        <div class="container d-flex" style="width: 550px;">
-            <p style="text-align: justify;  margin-top: 1rem;">You can vote only one time. Therefore, please be careful about the candidate. If you vote for Payut, you will face the bright future. </p>
+        <div class="container" id="never-vote">
         </div>
-        <div class="container">
-            <div class="row justify-content-start">
-                <div class="col">
-                    <h2><b>Candidate 1</b></h2>
-                    <a class="btn btn-primary btn-lg zoom shadow m-3" onclick="vote(1)"> VOTE NOW </a>
-                </div>
-                <div class="col">
-                    <h2><b>Candidate 2</b></h2>
-                    <a class="btn btn-primary btn-lg zoom shadow m-3" onclick="vote(2)"> VOTE NOW </a>
-                </div>
-              </div>
-        </div>
+        <div id="already-vote"></div>
         <hr class="dropdown-divider mx-4">
         <div class="text-start ms-5"><h2>Learn more about applicants</h2></div>
         <div class="container">
@@ -86,7 +74,7 @@
     </div>
     <%- include('./partials/footer') %>
     <!-- chartjs script -->
-    <script src="/scripts/voteChart.js"></script>
+    <script src="/scripts/chart.js"></script>
     <!-- votejs script -->
     <script src="/scripts/script.js"></script>
 </body>

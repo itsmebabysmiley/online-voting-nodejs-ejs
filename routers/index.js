@@ -1,5 +1,4 @@
 const express = require('express'),
-
       router = express(),
       bcrypt = require('bcrypt'),
       jwt = require('jsonwebtoken'),
@@ -9,6 +8,8 @@ const dbConnection = require("../config/dbConnect");
 const transporter  = require("../config/nodemailer-config");
 const {checkAuthenticated, checkNotAuthenticated,                                                              checkAuthenticatedForVotePage, checkAuthenticatedForActivateAccount} = require("../middleware/index.js");
 const checkCaptcha = require("../middleware/checkCaptcha");
+const getVoteStatus = require("../models/get-voteStatus");
+
 
 router.get('/', (req,res) => {
     res.render("index");
@@ -86,17 +87,34 @@ router.get('/autertication/activate/:token', checkAuthenticatedForActivateAccoun
 
 router.get('/vote-info', async (req, res)=>{
   let connection = await dbConnection();
-  connection.query("select * from vote", async (err, result)=>{
+  let sql = `select vote.ID, vote.Number_vote, candidates.fullname from vote
+              inner join candidates on vote.ID = candidates.cID;`
+  connection.query(sql, async (err, result)=>{
     if(err) return res.json({error: true, data: err});
     return res.json( {error: false, data: result} );
   });
 })
 
-router.post('/voteme', checkAuthenticated, (req, res)=>{
-  //TODO : user has already voted that can't vote anymore. If user just voted, return the new vote count.
-
-  console.log(req.body);
-  res.status(200).json({data: 'ok'});
+router.post('/voteme', checkAuthenticated, async (req, res)=>{
+  //TODO: user has already voted that can't vote anymore. If user just voted, return the new vote count.
+  if(req.user[0].email !== req.body.email || req.user[0].emailVerified === 'false'){
+    return res.status(401).json({error: true, "responseCode" : 4,"responseDesc" : "Failed to authericated user"});
+  }
+  var voteStatus = await getVoteStatus(req.body.email);
+  if(voteStatus[0].voted === 'true'){
+    return res.status(200).json({error: true,"responseCode" : 3,"responseDesc" : "User already voted."});
+  }else{
+    //update vote status and increase voted number.
+    let connection = await dbConnection();
+    connection.query("UPDATE users SET voted = ? WHERE email = ?", ['true',req.body.email], (err,result)=>{
+      if(err) throw err;
+      
+      return connection.query("UPDATE vote SET Number_vote = Number_vote +1 where ID = ?", req.body.candidateID, (err, response) =>{
+        if(err) throw err;
+        return res.status(200).json({error: false,"responseCode" : 1,"responseDesc" : "Successfully vote!"});
+      })
+    });
+  }
 });
 
 

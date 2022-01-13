@@ -3,11 +3,13 @@ img1.src = '/images/cat.png';
 
 
 
-var voteCount = [];
+var voteCount = []; // Number of people who already voted.
+var candidateName = [];
+var voteInfo; 
 
-const labels = ['Baby','Bob'];
+/* ---------start chartjs setup--------- */
 var data = {
-    labels: ['Baby1','Baby2'],
+    labels: candidateName,
     datasets: [
         {
             barThickness: 100,
@@ -27,12 +29,13 @@ const barAvatar = {
         const {ctx, chartArea: {top, bottom, left, right, width, height},
         scales: {x,y}} = chart;
         ctx.save();
-        // console.log(y.getPixelForValue(100));
-        ctx.drawImage(img1, x.getPixelForValue(0) - (100/2), y.getPixelForValue(100) - 110, 100, 100);
-        ctx.drawImage(img1, x.getPixelForValue(1) - (100/2), y.getPixelForValue(300) - 110, 100, 100);
+        //drawImage(img,x,y,width,heigh)
+        for(var i = 0 ; i < voteCount.length; i++){
+            ctx.drawImage(img1, x.getPixelForValue(i) - (100/2), y.getPixelForValue(voteCount[i]) - 115, 100, 100);
+        }
     }
 }
-
+//config chartjs
 const config = {
     type: 'bar',
     data,
@@ -59,7 +62,7 @@ const config = {
                     beginAtZero: true,
                     display: false,
                     suggestedMin: 0,
-                    suggestedMax: 500
+                    suggestedMax: Math.max(voteCount)+200
                 },
                 x: {
                     beginAtZero: true,
@@ -68,8 +71,9 @@ const config = {
                     },
                 }
             },
-        },
-};
+        }
+}
+/* ---------End create setup--------- */
 function createChart(){
     var myChart = new Chart(
         document.getElementById('myChart'),
@@ -85,8 +89,9 @@ async function getVoteInfo(){
     }
     for(i in response.data.data){
         voteCount.push(response.data.data[i].Number_vote);
+        candidateName.push(response.data.data[i].fullname);
     }
-    console.log(voteCount);
+    voteInfo = response;
     createChart()
 }
 getVoteInfo();
