@@ -1,14 +1,5 @@
-# online-voting-nodejs-ejs
-<img src="https://github.com/itsmebabysmiley/online-voting-nodejs-ejs/blob/main/voteme%20logo.png">
+# Online website for online voting
 
-## Homepage
-<p align="center"> <img src="https://github.com/itsmebabysmiley/online-voting-nodejs-ejs/blob/main/giphy-homepage.gif"> </p>
+<img src="https://github.com/itsmebabysmiley/online-voting-nodejs-ejs/blob/developing/public/images/voteme-logo.png">
 
-## Login page
-<p align="center"> <img src="https://github.com/itsmebabysmiley/online-voting-nodejs-ejs/blob/main/giphy-login.gif"> </p>
-
-## Register page
-<p align="center"> <img src="https://github.com/itsmebabysmiley/online-voting-nodejs-ejs/blob/main/giphy-register.gif"> </p>
-
-## Vote results page
-<p align="center"> <img src="https://github.com/itsmebabysmiley/online-voting-nodejs-ejs/blob/main/giphy-vote-page.gif"> </p>
+This project is implementing on Express JS and EJS template. 

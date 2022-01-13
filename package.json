@@ -17,12 +17,21 @@
   },
   "homepage": "https://github.com/codeforgeek/google-racapcha-node#readme",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "body-parser": "^1.19.1",
+    "cookie-parser": "^1.4.6",
     "dotenv": "^10.0.0",
     "ejs": "^3.1.6",
     "express": "^4.17.2",
+    "express-flash": "0.0.2",
+    "express-mysql-session": "^2.1.7",
+    "express-session": "^1.17.2",
+    "jsonwebtoken": "^8.5.1",
+    "mysql": "^2.18.1",
+    "nodemailer": "^6.7.2",
     "nodemon": "^2.0.15",
-    "promise-mysql": "^5.0.4",
+    "passport": "^0.5.2",
+    "passport-local": "^1.0.0",
     "request": "^2.88.2"
   }
 }

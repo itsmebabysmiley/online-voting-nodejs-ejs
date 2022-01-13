@@ -1,0 +1,12 @@
+.container {
+    max-width: 960px; /* (depends on your taste) */
+  }
+  
+  
+.thing-in-middle{
+    
+    display: flex;
+    align-items: center;
+    margin-top: 120px;
+  
+}

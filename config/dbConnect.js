@@ -1,5 +1,5 @@
-const mysql = require("promise-mysql");
-
+// const mysql = require("promise-mysql");
+var mysql = require('mysql');
 var dbConfig = {
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -8,9 +8,8 @@ var dbConfig = {
 };
 module.exports = async () => {
   try {
-    let pool = await mysql.createPool(dbConfig);
-    let connection = pool.getConnection();
-    console.log(`Database ${process.env.DB_NAME} connected!`)
+    var connection = mysql.createConnection(dbConfig);
+    connection.connect();
     return connection;
   } catch (error) {
     throw error;

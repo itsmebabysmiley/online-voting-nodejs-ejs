@@ -1,0 +1,21 @@
+
+.form-signup {
+  width: 100%;
+  max-width: 400px;
+  margin: auto;
+}
+
+
+.form-signup .form-floating:focus-within {
+  z-index: 2;
+}
+
+
+.form-floating{
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.btn-signup {
+  max-width: 330px;
+}
