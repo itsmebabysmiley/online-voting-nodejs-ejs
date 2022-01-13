@@ -43,5 +43,21 @@ MAIL_USER = <Get if from Mailtrap>
 MAIL_PASS = <Get if from Mailtrap>
 ```
 
-## Important thing. You can support the developer by(If you live in Thailand). just kindding, it's totally free.
+## Example of the UI
+
+### Homepage
+<p align="center"><img src="https://github.com/itsmebabysmiley/online-voting-nodejs-ejs/blob/main/giphy-homepage.gif"></p>
+
+### Login
+<p align="center"><img src="https://github.com/itsmebabysmiley/online-voting-nodejs-ejs/blob/main/giphy-login.gif"></p>
+
+### Register
+<p align="center"><img src="https://github.com/itsmebabysmiley/online-voting-nodejs-ejs/blob/main/giphy-register.gif"></p>
+
+### Register
+<p align="center"><img src="https://github.com/itsmebabysmiley/online-voting-nodejs-ejs/blob/main/giphy-vote-page.gif"></p>
+
+
+## Important thing. 
+You can support the developer by(If you live in Thailand). just kindding, it's totally free.
 <p align="center"><img src="https://github.com/itsmebabysmiley/online-voting-nodejs-ejs/blob/main/public/images/donate/donateQR.jpg" width="250px"></p>
