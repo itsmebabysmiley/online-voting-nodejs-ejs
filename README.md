@@ -18,7 +18,7 @@ This project, involved reCAPTCHA v2 from Google(https://www.google.com/recaptcha
 
 ## Features
 1. Email verfication.  
-Just one hahaha.
+2. reCAPTCHA at login page.
 
 ## Simplest Database design.
 <img src="https://github.com/itsmebabysmiley/online-voting-nodejs-ejs/blob/main/public/images/election_db_diagram.png">
@@ -54,7 +54,7 @@ MAIL_PASS = <Get if from Mailtrap>
 ### Register
 <p align="center"><img src="https://github.com/itsmebabysmiley/online-voting-nodejs-ejs/blob/main/giphy-register.gif"></p>
 
-### Register
+### Vote
 <p align="center"><img src="https://github.com/itsmebabysmiley/online-voting-nodejs-ejs/blob/main/giphy-vote-page.gif"></p>
 
 
