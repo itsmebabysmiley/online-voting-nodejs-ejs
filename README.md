@@ -14,7 +14,7 @@
     - /back-end
       - I think back-end is fine.
 
-This project, involved reCAPTCHA v2 from Google(https://www.google.com/recaptcha/) and Mailtrap(https://mailtrap.io/). If you want to clone this repository, I recommended you register on both platforms.
+This project, involved reCAPTCHA v2 from Google(https://www.google.com/recaptcha/) and Mailtrap(https://mailtrap.io/). If you want to clone this repository, I recommended you register on both platforms. Don't know where to start [How to set up](https://github.com/itsmebabysmiley/online-voting-nodejs-ejs/wiki/How-to-set-up)
 
 ## Features
 1. Email verfication.  
