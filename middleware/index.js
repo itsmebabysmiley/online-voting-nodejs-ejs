@@ -45,10 +45,8 @@ middlewareObj.checkAuthenticatedForActivateAccount = (req, res, next) =>{
             }else{
                 emailVerified = 'false';
             }
-            req.body = {email: email, password: password, emailVerified: emailVerified};
-            if(req.user){
-                req.user[0].emailVerified = emailVerified;
-            }
+            // req.body = {email: email, password: password, emailVerified: emailVerified};
+            req.whoami = {email: email, password: password, emailVerified: emailVerified};
             return next();
         }
       });

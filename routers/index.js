@@ -39,7 +39,7 @@ router.get('/vote-results',checkAuthenticatedForVotePage, (req, res) => {
 router.post('/login',checkCaptcha,checkNotAuthenticated, passport.authenticate('local',
                                             { failureRedirect: '/login', 
                                               successRedirect: '/vote-page',
-                                              failureFlash: true }));
+                                              failureFlash: true })); 
 
 router.post('/register',checkNotAuthenticated, async (req, res) => {
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -61,11 +61,11 @@ router.post('/register',checkNotAuthenticated, async (req, res) => {
     }
     else{
         // Generate token for verify an email.
-        var token = jwt.sign({ email: req.body.email, password: req.body.password }, process.env.JWT_SECRET, { expiresIn: '10h' });
+        var token = jwt.sign({ email: user.email, password: user.password }, process.env.JWT_SECRET, { expiresIn: '10h' });
         try {
           info = await transporter.sendMail({
             from: '"Voteme" <noreply@voteme.com>', // sender address
-            to: req.body.email, // list of receivers
+            to: user.email, // list of receivers
             subject: "Please confrim the email", // Subject line
             text: `Please confrim this email to vote Payut.`, // plain text body
             html: `<h2>Please click on given link to activate your account</h2><p>Dear ${req.body.fname} ${req.body.lname}, </p> Please click on given link to activate your account <a href="http://127.0.0.1:3000/autertication/activate/${token}">confirm</a> in 1 hour before your computer brow up.` // html body
@@ -73,17 +73,21 @@ router.post('/register',checkNotAuthenticated, async (req, res) => {
         }catch(error){
           throw error;
         }
-
-      return res.redirect('/login');
+        return req.login({email: req.body.email, password: user.password}, function(err) {
+          if (err) { throw err; }
+          return res.redirect('/');
+        });
     }
   });
 })
 
 //check valid link for new user to activate the account.
-router.get('/autertication/activate/:token', checkAuthenticatedForActivateAccount, passport.authenticate('local',
-                                                                                            { failureRedirect: '/Not-found', 
-                                                                                            successRedirect: '/',
-                                                                                            failureFlash: true }));
+router.get('/autertication/activate/:token', checkAuthenticatedForActivateAccount, (req, res)=>{
+  return req.login(req.whoami, function(err) {
+    if (err) { throw err }
+    return res.redirect('/');
+  });
+});
 
 router.get('/vote-info', async (req, res)=>{
   let connection = await dbConnection();

@@ -37,21 +37,30 @@ require("./config/passport-config.js");
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(async (req, res, next) => {
+    var user = {email: null, emailStatus: null, vote: null}
     res.locals.currentUser = null;
     res.locals.emailVerified = null;
-    if(req.user){
-        let users = { email: req.user[0].email };
-        res.locals.currentUser = req.user[0].email; 
-        var emailStatus = await getEmailStatus(req.user[0].email);
-        var voteStatus = await getVoteStatus(req.user[0].email);
-        if(emailStatus){
-            res.locals.emailVerified = emailStatus[0].emailVerified; 
-            req.user[0].emailVerified = emailStatus[0].emailVerified;
-            users.emailVerified = emailStatus[0].emailVerified;
-            users.voted = voteStatus[0].voted;
+    if(req.user){ //user exist.
+        //req.user are different when user request to register or login. Register is {} but Login is [{}]
+        //register
+        if(!Array.isArray(req.user)){
+            user.email = req.user.email;
         }
-        res.cookie("userData", users,);
-    } 
+        //login
+        else{
+            user.email = req.user[0].email;
+        }
+        res.locals.currentUser = user.email;   
+        var emailStatus = await getEmailStatus(user.email);
+        var voteStatus = await getVoteStatus(user.email);
+        if(emailStatus.length == 1){
+            res.locals.emailVerified = emailStatus[0].emailVerified; 
+            req.user.emailVerified = emailStatus[0].emailVerified;
+            user.emailVerified = emailStatus[0].emailVerified;
+            user.voted = voteStatus.voted;
+        }
+        res.cookie("userData", user,);
+    }
     // console.log(req.session);
     // console.log(req.user);
     next();
