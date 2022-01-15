@@ -9,7 +9,6 @@
 4. The candidate is kinda static. You can have only 2 candidates. However, if you want to add more, I recommend you to look at 
     - /front-end
       - vote-page.ejs
-      - vote-result.ejs
       - script.js and chart.js
     - /back-end
       - I think back-end is fine.
