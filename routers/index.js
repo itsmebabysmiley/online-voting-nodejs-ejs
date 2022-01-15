@@ -6,7 +6,8 @@ const express = require('express'),
 
 const dbConnection = require("../config/dbConnect");
 const transporter  = require("../config/nodemailer-config");
-const {checkAuthenticated, checkNotAuthenticated,                                                              checkAuthenticatedForVotePage, checkAuthenticatedForActivateAccount} = require("../middleware/index.js");
+const {checkAuthenticated, checkNotAuthenticated, 
+  checkAuthenticatedForActivateAccount} = require("../middleware/index.js");                                                           
 const checkCaptcha = require("../middleware/checkCaptcha");
 const getVoteStatus = require("../models/get-voteStatus");
 
@@ -20,6 +21,7 @@ router.get('/login',checkNotAuthenticated, (req,res) => {
 });
 
 router.get('/logout', (req, res)=>{
+    res.clearCookie("userData")
     req.logout();
     res.redirect("/");
 })
@@ -28,17 +30,13 @@ router.get('/register',checkNotAuthenticated, (req,res) => {
     res.render("register", {errorCode : 0, user: {}});
 });
 
-router.get('/vote-page',checkAuthenticated, (req, res)=>{
-    res.render('vote-page.ejs',);
+router.get('/vote', (req, res)=>{
+    res.render('vote-page.ejs');
 })
-
-router.get('/vote-results',checkAuthenticatedForVotePage, (req, res) => {
-    res.render("vote-result.ejs");
-});
 
 router.post('/login',checkCaptcha,checkNotAuthenticated, passport.authenticate('local',
                                             { failureRedirect: '/login', 
-                                              successRedirect: '/vote-page',
+                                              successRedirect: '/vote',
                                               failureFlash: true })); 
 
 router.post('/register',checkNotAuthenticated, async (req, res) => {
@@ -100,7 +98,7 @@ router.get('/vote-info', async (req, res)=>{
 })
 
 router.post('/voteme', checkAuthenticated, async (req, res)=>{
-  //TODO: user has already voted that can't vote anymore. If user just voted, return the new vote count.
+  //If user has already voted, they can't vote anymore.
   if(req.user[0].email !== req.body.email || req.user[0].emailVerified === 'false'){
     return res.status(401).json({error: true, "responseCode" : 4,"responseDesc" : "Failed to authericated user"});
   }
@@ -120,9 +118,5 @@ router.post('/voteme', checkAuthenticated, async (req, res)=>{
     });
   }
 });
-
-
-
-
 
 module.exports = router;

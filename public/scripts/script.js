@@ -85,6 +85,7 @@ async function getVoteInfo(){
     voteInfo = response.data.data;
     
     var userData = getCookie();
+    console.log(userData);
     if(userData.voted == 'true'){
         document.getElementById("already-vote").innerHTML += dontWorryAboutNameVariable;
     }else{
