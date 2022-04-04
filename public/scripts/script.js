@@ -21,15 +21,21 @@ var dontWorryAboutNameVariableV2 = `<h1> <b>Your vote is important!</b></h1>
                                             </div>
                                         </div>
                                     </div>`
+var dontWorryAboutNameVariableV3 = `<div class="container" id="never-vote">
+                                        <h1> <b>Your vote is important!</b></h1>
+                                        <a class="btn btn-primary btn-lg  zoom shadow m-5 " data-bs-toggle="modal" data-bs-target="#exampleModal"> VOTE NOW </a>
+                                    </div>`     
 var canId = []
 var canName =[];
 var voteInfo;
 
 function getCookie(){
-    //assume that we have only cookie name userData.
-    let x = decodeURIComponent(document.cookie)
-    return JSON.parse(x.substring(x.indexOf(":")+1));
-}
+    let x = decodeURIComponent(document.cookie);
+    if(x !== '')
+        return JSON.parse(x.substring(x.indexOf(":")+1));
+    else
+        return "";
+    }
 
 
 
@@ -84,14 +90,15 @@ async function getVoteInfo(){
     }
     voteInfo = response.data.data;
     
-    var userData = getCookie();
-    console.log(userData);
+    var userData = getCookie(); // If cookie is empty, user haven't login.
     if(userData.voted == 'true'){
         document.getElementById("already-vote").innerHTML += dontWorryAboutNameVariable;
-    }else{
-        document.getElementById("never-vote").innerHTML += dontWorryAboutNameVariableV2;
+    }else if(userData.voted == 'false'){
+        document.getElementById("already-vote").innerHTML += dontWorryAboutNameVariableV2;
         document.getElementById("vote-btn1").innerHTML += canName[0];
         document.getElementById("vote-btn2").innerHTML += canName[1];
+    }else if(!userData){
+        document.getElementById("already-vote").innerHTML += dontWorryAboutNameVariableV3
     }
 }
 

@@ -55,13 +55,14 @@ app.use(async (req, res, next) => {
         var voteStatus = await getVoteStatus(user.email);
         if(emailStatus.length == 1){
             res.locals.emailVerified = emailStatus[0].emailVerified; 
+
             req.user.emailVerified = emailStatus[0].emailVerified;
             user.emailVerified = emailStatus[0].emailVerified;
             user.voted = voteStatus[0].voted;
         }
         res.cookie("userData", user,);
     }
-    // console.log(req.session);
+    console.log(req.session);
     // console.log(req.user);
     next();
 });

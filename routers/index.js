@@ -3,7 +3,7 @@ const express = require('express'),
       bcrypt = require('bcrypt'),
       jwt = require('jsonwebtoken'),
       passport = require('passport');
-
+const bp = require("body-parser");
 const dbConnection = require("../config/dbConnect");
 const transporter  = require("../config/nodemailer-config");
 const {checkAuthenticated, checkNotAuthenticated, 
@@ -11,6 +11,8 @@ const {checkAuthenticated, checkNotAuthenticated,
 const checkCaptcha = require("../middleware/checkCaptcha");
 const getVoteStatus = require("../models/get-voteStatus");
 
+router.use(bp.json());
+router.use(bp.urlencoded({ extended: true }));
 
 router.get('/', (req,res) => {
     res.render("index");
@@ -24,7 +26,7 @@ router.get('/logout', (req, res)=>{
     res.clearCookie("userData")
     req.logout();
     res.redirect("/");
-})
+});
 
 router.get('/register',checkNotAuthenticated, (req,res) => {
     res.render("register", {errorCode : 0, user: {}});
@@ -66,7 +68,7 @@ router.post('/register',checkNotAuthenticated, async (req, res) => {
             to: user.email, // list of receivers
             subject: "Please confrim the email", // Subject line
             text: `Please confrim this email to vote Payut.`, // plain text body
-            html: `<h2>Please click on given link to activate your account</h2><p>Dear ${req.body.fname} ${req.body.lname}, </p> Please click on given link to activate your account <a href="http://127.0.0.1:3000/autertication/activate/${token}">confirm</a> in 1 hour before your computer brow up.` // html body
+            html: `<h2>Please click on given link to activate your account</h2><p>Dear ${req.body.fname} ${req.body.lname}, </p> Please click on given link to activate your account <a href="http://127.0.0.1:3000/autertication/activate/${token}">confirm</a> in 10 hour before your computer brow up.` // html body
           });
         }catch(error){
           throw error;
@@ -99,7 +101,7 @@ router.get('/vote-info', async (req, res)=>{
 
 router.post('/voteme', checkAuthenticated, async (req, res)=>{
   //If user has already voted, they can't vote anymore.
-  if(req.user[0].email !== req.body.email || req.user[0].emailVerified === 'false'){
+  if(req.user.email !== req.body.email || req.user.emailVerified === 'false'){
     return res.status(401).json({error: true, "responseCode" : 4,"responseDesc" : "Failed to authericated user"});
   }
   var voteStatus = await getVoteStatus(req.body.email);
@@ -118,5 +120,9 @@ router.post('/voteme', checkAuthenticated, async (req, res)=>{
     });
   }
 });
+
+router.get('/about-candidate', (req, res)=>{
+  res.render("candidateInfo.ejs");
+})
 
 module.exports = router;

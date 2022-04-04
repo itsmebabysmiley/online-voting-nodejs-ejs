@@ -20,9 +20,11 @@ middlewareObj.checkNotAuthenticated = function(req, res, next){
 
 middlewareObj.checkAuthenticatedForActivateAccount = (req, res, next) =>{
     var  token = req.params.token;
+    console.log(token);
     if(token){
       jwt.verify(token, process.env.JWT_SECRET, async (err, decoded)=>{
         if(err){
+            console.log(err);
             return res.status(401).json({"responseCode" : 1,"responseDesc" : "Failed to activate your account! Maybe link is out of date or you're an idoit."})
         }else{
             const {email, password} = decoded;
@@ -30,11 +32,13 @@ middlewareObj.checkAuthenticatedForActivateAccount = (req, res, next) =>{
             var status = await updateEmail(email);
             var emailVerified = status === 1 ? 'true': 'false';
             req.whoami = {email: email, password: password, emailVerified: emailVerified};
+            console.log(req.whoami);
             return next();
         }
       });
+    }else{
+        return res.status(401).json({"responseCode" : 1,"responseDesc" : "Failed to activate your account! Maybe link is out of date or you're an idoit."})
     }
-    return res.status(401).json({"responseCode" : 1,"responseDesc" : "Failed to activate your account! Maybe link is out of date or you're an idoit."})
 }
 
 module.exports = middlewareObj;
