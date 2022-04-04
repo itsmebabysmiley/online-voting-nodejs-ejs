@@ -53,13 +53,12 @@ app.use(async (req, res, next) => {
         //     user.email = req.user[0].email;
         // }
         user.email = req.user[0].email;
-        res.locals.currentUser = user.email;   
+        res.locals.currentUser = user.email;    
         var emailStatus = await getEmailStatus(user.email);
         var voteStatus = await getVoteStatus(user.email);
         if(emailStatus.length == 1){
             res.locals.emailVerified = emailStatus[0].emailVerified; 
-
-            // req.user[0].emailVerified = emailStatus[0].emailVerified;
+            req.user[0].emailVerified = emailStatus[0].emailVerified;
             user.emailVerified = emailStatus[0].emailVerified;
             user.voted = voteStatus[0].voted;
         }
