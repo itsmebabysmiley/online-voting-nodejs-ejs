@@ -61,19 +61,14 @@ router.post('/register',checkNotAuthenticated, async (req, res) => {
     }
     else{
         // Generate token for verify an email.
-        var token = jwt.sign({ email: user.email, password: user.password }, process.env.JWT_SECRET, { expiresIn: '10h' });
-        try {
-          info = await transporter.sendMail({
-            from: '"Voteme" <noreply@voteme.com>', // sender address
-            to: user.email, // list of receivers
-            subject: "Please confrim the email", // Subject line
-            text: `Please confrim this email to vote Payut.`, // plain text body
-            html: `<h2>Please click on given link to activate your account</h2><p>Dear ${req.body.fname} ${req.body.lname}, </p> Please click on given link to activate your account <a href="http://127.0.0.1:3000/autertication/activate/${token}">confirm</a> in 10 hour before your computer brow up.` // html body
-          });
-        }catch(error){
-          throw error;
+        var token = jwt.sign({ email: user.email, password: user.password }, process.env.JWT_SECRET, { expiresIn: '60s' });
+        await sendEmail(req, token);
+        let req_user = {
+          email: req.body.email,
+          password: user.password,
+          emailVerified: 'false'
         }
-        return req.login({email: req.body.email, password: user.password}, function(err) {
+        return req.login([req_user], function(err) {
           if (err) { throw err; }
           return res.redirect('/');
         });
@@ -83,7 +78,7 @@ router.post('/register',checkNotAuthenticated, async (req, res) => {
 
 //check valid link for new user to activate the account.
 router.get('/autertication/activate/:token', checkAuthenticatedForActivateAccount, (req, res)=>{
-  return req.login(req.whoami, function(err) {
+  return req.login([req.whoami], function(err) {
     if (err) { throw err }
     return res.redirect('/');
   });
@@ -103,16 +98,20 @@ router.post('/voteme', checkAuthenticated, async (req, res)=>{
   //If user has already voted, they can't vote anymore.
   let req_user;
 
-  if(!Array.isArray(req.user)){
-    req_user = {
-      email : req.user.email,
-      emailVerified : req.user.emailVerified
-    }
-  }else{
-    req_user = {
-      email : req.user[0].email,
-      emailVerified : req.user[0].emailVerified
-    }
+  // if(!Array.isArray(req.user)){
+  //   req_user = {
+  //     email : req.user.email,
+  //     emailVerified : req.user.emailVerified
+  //   }
+  // }else{
+  //   req_user = {
+  //     email : req.user[0].email,
+  //     emailVerified : req.user[0].emailVerified
+  //   }
+  // }
+  req_user = {
+    email : req.user[0].email,
+    emailVerified : req.user[0].emailVerified
   }
   console.log(req_user);
   if(req_user.email !== req.body.email || req_user.emailVerified === 'false'){
@@ -140,3 +139,19 @@ router.get('/about-candidate', (req, res)=>{
 })
 
 module.exports = router;
+
+
+
+async function sendEmail(req, token){
+  try {
+    info = await transporter.sendMail({
+      from: '"Voteme" <noreply@voteme.com>', // sender address
+      to: req.body.email, // list of receivers
+      subject: "Please confrim the email", // Subject line
+      text: `Please confrim this email to vote Payut.`, // plain text body
+      html: `<h2>Please click on given link to activate your account</h2><p>Dear ${req.body.fname} ${req.body.lname}, </p> Please click on given link to activate your account <a href="http://127.0.0.1:3000/autertication/activate/${token}">confirm</a> in 5 minutes before your computer brow up.` // html body
+    });
+  }catch(error){
+    throw error;
+  }
+}
