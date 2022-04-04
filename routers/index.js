@@ -101,7 +101,21 @@ router.get('/vote-info', async (req, res)=>{
 
 router.post('/voteme', checkAuthenticated, async (req, res)=>{
   //If user has already voted, they can't vote anymore.
-  if(req.user.email !== req.body.email || req.user.emailVerified === 'false'){
+  let req_user;
+
+  if(!Array.isArray(req.user)){
+    req_user = {
+      email : req.user.email,
+      emailVerified : req.user.emailVerified
+    }
+  }else{
+    req_user = {
+      email : req.user[0].email,
+      emailVerified : req.user[0].emailVerified
+    }
+  }
+  console.log(req_user);
+  if(req_user.email !== req.body.email || req_user.emailVerified === 'false'){
     return res.status(401).json({error: true, "responseCode" : 4,"responseDesc" : "Failed to authericated user"});
   }
   var voteStatus = await getVoteStatus(req.body.email);
