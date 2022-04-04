@@ -61,7 +61,7 @@ router.post('/register',checkNotAuthenticated, async (req, res) => {
     }
     else{
         // Generate token for verify an email.
-        var token = jwt.sign({ email: user.email, password: user.password }, process.env.JWT_SECRET, { expiresIn: '60s' });
+        var token = jwt.sign({ email: user.email, password: user.password }, process.env.JWT_SECRET, { expiresIn: '300s' });
         await sendEmail(req, token);
         let req_user = {
           email: req.body.email,
