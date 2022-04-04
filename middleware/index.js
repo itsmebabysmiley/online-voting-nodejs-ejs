@@ -25,7 +25,7 @@ middlewareObj.checkAuthenticatedForActivateAccount = (req, res, next) =>{
       jwt.verify(token, process.env.JWT_SECRET, async (err, decoded)=>{
         if(err){
             console.log(err);
-            return res.status(401).json({"responseCode" : 1,"responseDesc" : "Failed to activate your account! Maybe link is out of date or you're an idoit."})
+            return res.status(401).json({"responseCode" : 1,"responseDesc" : "Failed to activate your account! Maybe link is out of date or ", "message" : err.message})
         }else{
             const {email, password} = decoded;
             // TODO: fix the emailverified to be real value.
@@ -37,7 +37,7 @@ middlewareObj.checkAuthenticatedForActivateAccount = (req, res, next) =>{
         }
       });
     }else{
-        return res.status(401).json({"responseCode" : 1,"responseDesc" : "Failed to activate your account! Maybe link is out of date or you're an idoit."})
+        return res.status(401).json({"responseCode" : 1,"responseDesc" : "SOMETING HAPPEND UNEXPECTED. PLEASE CONTACT SOMEONE BUT NOT THE DEVELOPERs."})
     }
 }
 
