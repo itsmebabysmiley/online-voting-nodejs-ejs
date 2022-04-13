@@ -1,5 +1,10 @@
 var img1 = new Image(100, 100);
+var img2 = new Image(100, 100);
 img1.src = '/images/cat.png';
+img2.src = '/images/dog.png';
+let imgList = []
+imgList.push(img1);
+imgList.push(img2);
 
 
 
@@ -30,9 +35,19 @@ const barAvatar = {
         scales: {x,y}} = chart;
         ctx.save();
         //drawImage(img,x,y,width,heigh)
+        let count = 0;
         for(var i = 0 ; i < voteCount.length; i++){
-            ctx.drawImage(img1, x.getPixelForValue(i) - (100/2), y.getPixelForValue(voteCount[i]) - 115, 100, 100);
+            if(count == 0){
+                ctx.drawImage(img1, x.getPixelForValue(i) - (100/2), y.getPixelForValue(voteCount[i]) - 115, 100, 100);
+                count++;
+            }else{
+                ctx.drawImage(img2, x.getPixelForValue(i) - (100/2), y.getPixelForValue(voteCount[i]) - 115, 100, 100);
+                count = 0;
+            }
         }
+        // ctx.drawImage(img1, x.getPixelForValue(i) - (100/2), y.getPixelForValue(voteCount[0]) - 115, 100, 100);
+        // ctx.drawImage(img2, x.getPixelForValue(i) - (100/2), y.getPixelForValue(voteCount[1]) - 115, 100, 100);
+
     }
 }
 //config chartjs
@@ -95,6 +110,6 @@ async function getVoteInfo(){
     createChart()
 }
 getVoteInfo();
-
+console.log(imgList);
 
 
