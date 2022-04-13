@@ -15,7 +15,7 @@ router.use(bp.json());
 router.use(bp.urlencoded({ extended: true }));
 
 router.get('/', (req,res) => {
-    res.render("index");
+  res.render("index");
 });
 
 router.get('/login',checkNotAuthenticated, (req,res) => {
@@ -42,6 +42,21 @@ router.post('/login',checkCaptcha,checkNotAuthenticated, passport.authenticate('
                                               failureFlash: true })); 
 
 router.post('/register',checkNotAuthenticated, async (req, res) => {
+  if(Object.keys(req.body).length === 0){
+    return res.status(400).send({
+      "error" : true,
+      "message" : "body is empty"
+    })
+  }
+  const regex = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/);
+  const isMatch = regex.test(req.body.password);
+  if(!isMatch){
+    return res.status(400).send({
+      "error" : true,
+      "message" : "Password must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+    });
+  }
+
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
   const user = {
     'fname' : req.body.fname,
@@ -52,16 +67,16 @@ router.post('/register',checkNotAuthenticated, async (req, res) => {
     'DOB' : req.body.DOB
   }
   let connection = await dbConnection();
-  connection.query("insert into election_db.users set ?", user, async (err, result)=>{
+  connection.query("insert into election_db.users set ?", [user], async (err, result)=>{
     if(err){
       if(err.errno == 1062){
-        return res.render("register.ejs", {errorCode: 1, msg: "This email is already used. Please use another email", user});
+        return res.render("register.ejs",{errorCode: 1, msg: "This email is already used. Please use another email", user});
       }
-      return res.render("register.ejs", {errorCode: 4, msg: "Someting went wrong. Please try again"});
+      return res.render("register.ejs",{errorCode: 4, msg: "Someting went wrong. Please try again"});
     }
     else{
         // Generate token for verify an email.
-        var token = jwt.sign({ email: user.email, password: user.password }, process.env.JWT_SECRET, { expiresIn: '300s' });
+        var token = jwt.sign({ email: user.email, password: user.password }, process.env.JWT_SECRET, { expiresIn: '300s' }); //5mins
         await sendEmail(req, token);
         let req_user = {
           email: req.body.email,
@@ -97,23 +112,26 @@ router.get('/vote-info', async (req, res)=>{
 router.post('/voteme', checkAuthenticated, async (req, res)=>{
   //If user has already voted, they can't vote anymore.
   let req_user;
+  // console.log("----request body----");
+  // console.log(req.body);
+  if(!Array.isArray(req.user)){
+    req_user = {
+      email : req.user.email,
+      emailVerified : req.user.emailVerified
+    }
+  }else{
+    req_user = {
+      email : req.user[0].email,
+      emailVerified : req.user[0].emailVerified
+    }
+  }
 
-  // if(!Array.isArray(req.user)){
-  //   req_user = {
-  //     email : req.user.email,
-  //     emailVerified : req.user.emailVerified
-  //   }
-  // }else{
-  //   req_user = {
-  //     email : req.user[0].email,
-  //     emailVerified : req.user[0].emailVerified
-  //   }
-  // }
   req_user = {
     email : req.user[0].email,
     emailVerified : req.user[0].emailVerified
   }
-  console.log(req_user);
+  // console.log("----user logged in information----");
+  // console.log(req_user);
   if(req_user.email !== req.body.email || req_user.emailVerified === 'false'){
     return res.status(401).json({error: true, "responseCode" : 4,"responseDesc" : "Failed to authericated user"});
   }

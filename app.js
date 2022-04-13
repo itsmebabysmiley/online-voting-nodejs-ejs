@@ -40,18 +40,19 @@ app.use(async (req, res, next) => {
     var user = {email: null, emailStatus: null, vote: null}
     res.locals.currentUser = null;
     res.locals.emailVerified = null;
-    console.log("default:\n");
-    console.log(req.user);
+    // console.log("default:\n");
+    // console.log(req.user);
     if(req.user){ //user exist.
         //req.user are different when user request to register or login. Register is {} but Login is [{}]
         //register
-        // if(!Array.isArray(req.user)){
-        //     user.email = req.user.email;
-        // }
-        // //login
-        // else{
-        //     user.email = req.user[0].email;
-        // }
+        if(!Array.isArray(req.user)){
+            user.email = req.user.email;
+        }
+        //login
+        else{
+            user.email = req.user[0].email;
+        }
+
         user.email = req.user[0].email;
         res.locals.currentUser = user.email;    
         var emailStatus = await getEmailStatus(user.email);
@@ -65,7 +66,7 @@ app.use(async (req, res, next) => {
         res.cookie("userData", user,);
     }
     // console.log(req.session);
-    console.log(req.user);
+    // console.log(req.user);
     next();
 });
 
