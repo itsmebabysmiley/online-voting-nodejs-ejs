@@ -95,7 +95,7 @@
                         </div>
                         <div class="row form-signup" >
                             <div class="col form-floating" style="padding-left: 0px; margin-bottom: 0px; margin-top: 0px;">
-                                <input type="tel" class="form-control" id="phoneNumber" name="tel" placeholder="phone number" maxlength="10"  pattern="[0-9]{10}" value="<%= user.tel %>"oninvalid="this.setCustomValidity('Please put only number 0-9')" required/>
+                                <input type="tel" class="form-control" id="phoneNumber" name="tel" placeholder="phone number" maxlength="10"  pattern="[0-9]{10}" value="<%= user.tel %>"title="Please put only 10 digits of number."required/>
                                 <label for="phoneNumber">phone number</label>
                             </div>
                             <div class="col form-floating" style="padding-right: 0px; margin-bottom: 0px; margin-top: 0px;">
