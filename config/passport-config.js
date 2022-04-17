@@ -11,7 +11,7 @@ const customFields = {
 
 const verifyCallback = async (username, password, done) => {
   let connection = await dbConnection();
-  connection.query("SELECT email,password,emailVerified FROM election_db.users WHERE email = ?", username, async (err, result)=> {
+  connection.query("SELECT email,password,emailVerified FROM election_db.users WHERE email = ?", [username], async (err, result)=> {
     if(err){
       done(err);
     }else{

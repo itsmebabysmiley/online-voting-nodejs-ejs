@@ -34,7 +34,7 @@ router.get('/register',checkNotAuthenticated, (req,res) => {
 
 router.get('/vote', (req, res)=>{
     res.render('vote-page.ejs');
-})
+});
 
 router.post('/login',checkCaptcha,checkNotAuthenticated, passport.authenticate('local',
                                             { failureRedirect: '/login', 
@@ -144,7 +144,7 @@ router.post('/voteme', checkAuthenticated, async (req, res)=>{
     connection.query("UPDATE users SET voted = ? WHERE email = ?", ['true',req.body.email], (err,result)=>{
       if(err) throw err;
       
-      return connection.query("UPDATE vote SET Number_vote = Number_vote +1 where ID = ?", req.body.candidateID, (err, response) =>{
+      return connection.query("UPDATE vote SET Number_vote = Number_vote +1 where ID = ?", [req.body.candidateID], (err, response) =>{
         if(err) throw err;
         return res.status(200).json({error: false,"responseCode" : 1,"responseDesc" : "Successfully vote!"});
       })
@@ -167,7 +167,7 @@ async function sendEmail(req, token){
       to: req.body.email, // list of receivers
       subject: "Please confrim the email", // Subject line
       text: `Please confrim this email to vote Payut.`, // plain text body
-      html: `<h2>Please click on given link to activate your account</h2><p>Dear ${req.body.fname} ${req.body.lname}, </p> Please click on given link to activate your account <a href="http://127.0.0.1:3000/autertication/activate/${token}">confirm</a> in 5 minutes before your computer brow up.` // html body
+      html: `<h2>Please click on given link to activate your account</h2><p>Dear ${req.body.fname} ${req.body.lname}, </p> Please click on given link to activate your account <a href="http://127.0.0.1:3000/autertication/activate/${token}">confirm</a> in 5 minutes before your computer brow up. <br/> Full Link: http://127.0.0.1:3000/autertication/activate/${token} ` // html body
     });
   }catch(error){
     throw error;

@@ -20,7 +20,7 @@ middlewareObj.checkNotAuthenticated = function(req, res, next){
 
 middlewareObj.checkAuthenticatedForActivateAccount = (req, res, next) =>{
     var  token = req.params.token;
-    console.log(token);
+    // console.log(token);
     if(token){
       jwt.verify(token, process.env.JWT_SECRET, async (err, decoded)=>{
         if(err){
@@ -32,7 +32,7 @@ middlewareObj.checkAuthenticatedForActivateAccount = (req, res, next) =>{
             var status = await updateEmail(email);
             var emailVerified = status === 1 ? 'true': 'false';
             req.whoami = {email: email, password: password, emailVerified: emailVerified};
-            console.log(req.whoami);
+            // console.log(req.whoami);
             return next();
         }
       });
